@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Python button
+        </title>
+        <style>
+            .blue{
+                background-color: gray;
+                color:whitesmoke;
+                height:auto;
+                width:auto;
+                padding:16px;
+                border-width:10px;
+                border-style:groove;
+                border-color: red;
+                border-radius: 80px;
+
+            }
+            .red{
+                background-color: slategray;
+                color:wheat;
+                height:auto;
+                width:auto;
+                padding:16px;
+                border-width:10px;
+                border-style:groove;
+                border-color: greenyellow;
+                border-radius: 80px;
+
+            }
+        </style>
+    </head>
+    <body>
+
+               <img src="https://imageio.forbes.com/specials-images/imageserve/61c4dab3dcce70ad2cdf606a/0x0.jpg?format=jpg&width=1200" width="1350px" height="300px">
+       <br><br>
+       <p style="color:black; font-size:300%"><u>Speech Conversion To Text</u></p>
+
+       <center>
+        <div class ='blue'>
+            <div id='result'>
+              Your text will  appear here
+            </div>
+            <br>
+            <div id= 'record'>
+                <button onclick="startConverting()" class='btn btn-info btn-sm' id="re">record</button>
+            </div>
+          
+            <script>
+               function startConverting()
+                      {
+                        // document.getElementById("re").style.visibility = "hidden";   
+                        var r=document.getElementById('result');
+                        var spr=new webkitSpeechRecognition(); //Initialisation of web Kit
+                          spr.continuous=false; //True if continous conversion is needed, false to stop transalation when paused 
+                          spr.interimResults=true;
+                          spr.lang='en-IN'; // Set Input language
+                          spr.start(); //Start Recording the voice 
+                          var ftr='';
+                          spr.onresult=function(event){
+                              var interimTranscripts='';
+                              for(var i=event.resultIndex;i<event.results.length;i++)
+                              {
+                                  var transcript=event.results[i][0].transcript;
+                                  transcript.replace("\n","<br>")
+                                  if(event.results[i].isFinal){
+                                      ftr+=transcript;
+                                  }
+                                  else
+                                  interimTranscripts+=transcript;
+                              }
+                              r.innerHTML=ftr +interimTranscripts ;
+                          };
+          
+                          spr.onerror=function(event){};
+                      }
+            </script>
+          </div>
+          <p style="color:red; font-size:200%"><u>OR</u></p>
+
+        </center>
+ 
+               <form action = '/external/' method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+            <div class="blue">
+            
+           
+                <br><br>
+                <center><p style="color:darkblue">Accepted files: mp3,mp4a,wav,flac,3gp,webm</p>
+            <input type="file" name="audio"  align:middle required>
+            
+        
+            <br>
+            <input type="submit" value="Submit">
+            {{data_external}}<br><br>
+            {{data1}}
+             </center>
+            <br><br> <br><br><br>
+            </div>
+            <br><br>
+            <div>
+ 
+            
+        </form>
+     
+       
+
+        <form action = '/external/' method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p style="color:black; font-size:300%"><u>Speech Sentimental Analysis</u></p>
+            <div class="red">
+                <br><br>
+                <center><p style="color:darkblue">Accepted files: mp3,mp4a,wav,flac,3gp,webm</p>
+            <input type="file" name="speechsentiments"  align:middle required>
+            
+        
+            <br>
+            <input type="submit" value="Submit">
+            {{data_external}}<br><br>
+            {{data2}}
+             </center>
+            <br><br> <br><br><br>
+            </div>
+            </form>
+
+            
+
+          
+    </body>
+</html>
